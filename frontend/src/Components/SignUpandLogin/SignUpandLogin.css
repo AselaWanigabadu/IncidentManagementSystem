@@ -1,0 +1,87 @@
+.signup-login-content-container {
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    height: 600px; 
+}
+  
+  .signup-login-container {
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-image:linear-gradient(rgb(154, 203, 220),white);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.699);
+  }
+
+.signup-login-container input {
+    width: 240px;
+    padding: 10px;
+    margin: auto;
+    border: 1px solid #000000;
+    border-radius: 4px;
+}
+.signup-login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #210d79;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+}
+.signup-login-container button:hover {
+    background-color: #250450;
+}
+
+.signup-login-container-login-link {
+    text-align: center;
+    margin-top: 15px;
+}
+.signup-login-container-login-link a {
+    color: #007bff;
+    text-decoration: none;
+    
+   
+}
+.signup-login-container-login-link a:hover {
+    text-decoration: underline;
+   
+}
+
+.google-signin {
+    margin-top: 20px;
+}
+.google-signin button {
+    width: 100%;
+    padding: 8px;
+    background-color: #ffffff;
+    color: #030000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.google-signin button:hover {
+    background-color: #5c4541;
+}
+.google-signin img {
+    margin-right: 12px;
+    
+}
+
+.signInButton{
+    border-radius: 53px;
+}
+
+.LoginTopic{
+    margin-top: 10px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 24px;
+  font-style: normal; /* You can keep or remove this if no specific style is needed */
+  font-weight: bold; /* Makes the text bold */
+}
+
+.trLogin{
+    content-visibility: hidden;
+}
