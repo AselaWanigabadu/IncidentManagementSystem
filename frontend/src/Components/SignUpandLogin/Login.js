@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { GoogleLogin } from "react-google-login";
 import { LoginSocialFacebook } from "reactjs-social-login";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import bgPoto from "../../Assets/bdDash4.jpeg";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const clientId = "346768134358-plvhkl1bjjvt7b39uvekv2qg5cno5091.apps.googleusercontent.com";
 
@@ -60,21 +58,21 @@ function Login() {
     }
   };
 
-  const onGoogleSuccess = (res) => {
-    console.log("Google Login Successful! Current User: ", res.profileObj);
-    toast.success("Login Successful!");
+  const onGoogleSuccess = (response) => {
+    console.log("Google Login Successful! Current User: ", response);
 
     // Save Google user details to localStorage
-    localStorage.setItem("userEmail", res.profileObj.email);
-    localStorage.setItem("userImage", res.profileObj.imageUrl);
-    localStorage.setItem("userName", res.profileObj.name);
+    localStorage.setItem("userEmail", response.profileObj.email);
+    localStorage.setItem("userImage", response.profileObj.imageUrl);
+    localStorage.setItem("userName", response.profileObj.name);
 
     // Navigate to Home page
+    toast.success("Login Successful!");
     history("/");
   };
 
-  const onGoogleFailure = (res) => {
-    console.log("Google Login failed!", res);
+  const onGoogleFailure = (error) => {
+    console.log("Google Login failed!", error);
     toast.error("Login Failed! Please try again.");
   };
 
@@ -86,7 +84,7 @@ function Login() {
     localStorage.setItem("userImage", response.data.picture.data.url);
     localStorage.setItem("userName", response.data.name);
 
-    // Navigate to Home page 1080 1024
+    // Navigate to Home page
     history("/");
   };
 
@@ -94,58 +92,84 @@ function Login() {
     console.log("Facebook Login Failed!", error);
   };
 
+  // Load Google API script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/platform.js";
+    script.async = true;
+    script.onload = () => {
+      window.gapi.load("auth2", () => {
+        window.gapi.auth2.init({
+          client_id: clientId,
+        });
+      });
+    };
+    document.body.appendChild(script);
+  }, []);
 
+  const handleGoogleLogin = () => {
+    const auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signIn().then(
+      (googleUser) => {
+        onGoogleSuccess(googleUser);
+      },
+      (error) => {
+        onGoogleFailure(error);
+      }
+    );
+  };
 
   return (
     <div>
       <Header />
-      <div className="signup-login-content-container" 
-      
-      style={{
-        backgroundImage: `url(${bgPoto})`,
-        backgroundSize: 'cover', // Optional, ensures the image covers the container
-        backgroundPosition: 'center', // Optional, centers the image
-        margin:'10px',
-        marginLeft:'200px',
-        height:'541px',
-        width:'1024px'
-      }}>
+      <div
+        className="signup-login-content-container"
+        style={{
+          backgroundImage: `url(${bgPoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          margin: "10px",
+          marginLeft: "200px",
+          height: "541px",
+          width: "1024px",
+        }}
+      >
         <form className="signup-login-container" onSubmit={handleSubmit}>
           <div className="LoginTopic">Login</div>
           <table>
-          <thead>
-              <tr >
+            <thead>
+              <tr>
                 <th className="trLogin">Field</th>
                 <th className="trLogin">Input</th>
               </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Username : </td>
-              <td>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="johndoe@gmail.com"
-                  required
-                  value={user.email}
-                  onChange={handleInputsChange}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Password : </td>
-              <td>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  required
-                  value={user.password}
-                  onChange={handleInputsChange}
-                />
-              </td>
-            </tr>
+              <tr>
+                <td>Username : </td>
+                <td>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="johndoe@gmail.com"
+                    required
+                    value={user.email}
+                    onChange={handleInputsChange}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>Password : </td>
+                <td>
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                    value={user.password}
+                    onChange={handleInputsChange}
+                  />
+                </td>
+              </tr>
             </tbody>
           </table>
           <button type="submit">Login</button>
@@ -156,39 +180,28 @@ function Login() {
           </div>
 
           <div className="signInButton">
-  <GoogleLogin
-    clientId={clientId}
-    buttonText="Login With Google"
-    onSuccess={onGoogleSuccess}
-    onFailure={onGoogleFailure}
-    cookiePolicy={"single_host_origin"}
-    isSignedIn={true}
-  />
- <ToastContainer
-  position="top-right"
-  autoClose={3000}
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-/>
+            <button onClick={handleGoogleLogin}>Login With Google</button>
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
+          </div>
 
-</div>
-
-
-            <div className="signInButton">
-          <LoginSocialFacebook
-         
-            appId="8339108906212055"
-            onResolve={onFacebookSuccess}
-            onReject={onFacebookFailure}
-          >
-          
-            <FacebookLoginButton />
-          </LoginSocialFacebook>
+          <div className="signInButton">
+            <LoginSocialFacebook
+              appId="8339108906212055"
+              onResolve={onFacebookSuccess}
+              onReject={onFacebookFailure}
+            >
+              <FacebookLoginButton />
+            </LoginSocialFacebook>
           </div>
         </form>
       </div>
@@ -198,4 +211,3 @@ function Login() {
 }
 
 export default Login;
-///
