@@ -1,0 +1,9 @@
+runtime: nodejs20  
+handlers:
+  - url: /.*
+    script: auto
+
+env_variables:
+  MONGO_URL: "mongodb+srv://mongoodb2020:WAEzW2w90nQtx6P2@cluster0.oov7r.mongodb.net/IncidentDB"
+  SENDERMAIL: "mongoodb2020@gmail.com"
+  PASSWORD: "vvskqnkhdfcgkcnt"
