@@ -23,9 +23,11 @@ jobs:
           submodules: true
           lfs: false
 
-      # Optional: If you need to install any dependencies before building
+      # Ensure that the package.json is in the 'frontend' folder
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd frontend  # Change directory to 'frontend' folder if needed
+          npm install  # Install dependencies
 
       - name: Build and Deploy
         id: builddeploy
